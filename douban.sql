@@ -11,7 +11,7 @@
  Target Server Version : 50718
  File Encoding         : 65001
 
- Date: 14/05/2021 14:25:45
+ Date: 27/05/2021 08:54:26
 */
 
 SET NAMES utf8mb4;
@@ -36,7 +36,18 @@ CREATE TABLE `Custom`  (
   `status` int(11) NULL DEFAULT NULL,
   `updateDate` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`customId`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 305 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 306 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for city
+-- ----------------------------
+DROP TABLE IF EXISTS `city`;
+CREATE TABLE `city`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市代码',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for customhistory
@@ -66,7 +77,7 @@ CREATE TABLE `house_info`  (
   `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '链接',
   `creator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '创建者豆瓣的id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21099 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '租房信息原始信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 57455 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '租房信息原始信息表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for image
@@ -77,7 +88,7 @@ CREATE TABLE `image`  (
   `r_id` int(11) NULL DEFAULT NULL,
   `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 109162 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 329398 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for message
@@ -106,8 +117,24 @@ CREATE TABLE `rent_info`  (
   `only_girl` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '性别限制',
   `count` int(11) NULL DEFAULT NULL COMMENT '发布次数',
   `create_date` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `city` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '城市',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21097 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '租房分类信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 54668 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '租房分类信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for subways
+-- ----------------------------
+DROP TABLE IF EXISTS `subways`;
+CREATE TABLE `subways`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `subway_line_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `subway_line_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `subway_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `sort_index` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `city_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `sort_line` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4421 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for weixinuser

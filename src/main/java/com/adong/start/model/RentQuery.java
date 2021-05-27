@@ -25,5 +25,6 @@ public class RentQuery {
     private String line_id;
     /*站点id*/
     private String stand_id;
-
+    /*城市*/
+    private String city;
 }

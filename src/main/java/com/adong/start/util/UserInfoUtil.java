@@ -1,6 +1,6 @@
 package com.adong.start.util;
 
-import com.adong.start.config.WxConfig;
+import com.adong.start.SubwaySation.WxConfig;
 
 public class UserInfoUtil {
 

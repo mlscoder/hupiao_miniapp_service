@@ -1,6 +1,6 @@
 package com.adong.start.controller;
 
-import com.adong.start.config.Subway;
+import com.adong.start.SubwaySation.SubwaySation;
 import com.adong.start.model.*;
 import com.adong.start.service.*;
 import com.adong.start.util.HttpsUtil;
@@ -41,9 +41,12 @@ public class WeixinController {
     HouseinfoService houseinfoService;
     @Autowired
     MessageService messageService;
+    @Autowired
+    CityService cityService;
+    @Autowired
+    SubwayService subwayService;
 
-
-    String[] subwaylist = Subway.subways.replace(" ", "").split(",|\\s+");
+    String[] subwaylist = SubwaySation.subways.replace(" ", "").split(",|\\s+");
 
 
     @Value("${notice}")
@@ -382,6 +385,37 @@ public class WeixinController {
         Map map = new HashMap();
         Message message = messageService.list().get(0);
         map.put("data", message);
+        return map;
+    }
+
+    @RequestMapping("/city")
+    @ResponseBody
+    public Map<String, Object> queryCity() {
+        Map<String, Object> map = new HashMap<>();
+        List<City> cityList = cityService.list();
+        map.put("data", cityList);
+        return map;
+    }
+
+    @RequestMapping("/subway")
+    @ResponseBody
+    public Map<String, Object> queryCity(String cityCode) {
+        cityCode = cityCode == null ? "sh" : cityCode;
+        Map<String, Object> map = new HashMap<>();
+        QueryWrapper<Subway> q = new QueryWrapper<>();
+        q.eq("city_code", cityCode);
+
+        List<Subway> subways = subwayService.list(q);
+
+        QueryWrapper<Subway> q2 = new QueryWrapper<>();
+        q2.eq("city_code", cityCode);
+        q2.eq("sort_index","1");
+        List<Subway> subways2 = subwayService.list(q2);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("subways", subways);
+        result.put("weight_subways", subways2);
+        map.put("data", result);
         return map;
     }
 

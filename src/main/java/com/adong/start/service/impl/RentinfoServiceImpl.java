@@ -21,9 +21,17 @@ public class RentinfoServiceImpl extends ServiceImpl<RentinfoMapper, Rentinfo> i
     public IPage<Rentinfo> getQueryList(RentQuery rentQuery) {
         Page<Rentinfo> page = new Page<>(rentQuery.getPageno(), 10);
         QueryWrapper<Rentinfo> wrapper = new QueryWrapper<>();
+
         if (!rentQuery.getStand_id().equals("0")) {
             wrapper.eq("station", rentQuery.getStand_id());
         }
+
+        if (rentQuery.getCity() == null) {
+            wrapper.eq("city", "sh");
+        } else {
+            wrapper.eq("city", rentQuery.getCity());
+        }
+
         if (rentQuery.getLogicPay() != 0) {
             //这里前端写错了 参数传的2
             if (rentQuery.getLogicPay() == 2) {
