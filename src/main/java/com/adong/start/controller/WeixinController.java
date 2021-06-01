@@ -1,6 +1,6 @@
 package com.adong.start.controller;
 
-import com.adong.start.SubwaySation.SubwaySation;
+import com.adong.start.config.SubwaySation;
 import com.adong.start.model.*;
 import com.adong.start.service.*;
 import com.adong.start.util.HttpsUtil;
@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,10 +46,6 @@ public class WeixinController {
     SubwayService subwayService;
 
     String[] subwaylist = SubwaySation.subways.replace(" ", "").split(",|\\s+");
-
-
-    @Value("${notice}")
-    String notice;
 
     /**
      * 获取用户的openid
@@ -94,7 +89,6 @@ public class WeixinController {
                     WeixinUserInfo one = new WeixinUserInfo();
                     one.setOpenId(openId);
                     one = userInfoService.findByUser(one);
-                    String phone = null;
                     if (one == null) {
                         WeixinUserInfo entity = new WeixinUserInfo();
                         entity.setUserId(UtilTool.getUUId());
@@ -105,7 +99,6 @@ public class WeixinController {
                         WeixinUserInfo save = userInfoService.findByUser(entity);
                         userId = save.getUserId();
                         map.put("userId", userId);
-                        map.put("hasPhone", false);
                     } else {
                         userId = one.getUserId();
                         map.put("userId", userId);
@@ -294,18 +287,18 @@ public class WeixinController {
         queryWrapper.orderByDesc("createDate");
         queryWrapper.last("limit 10");
         List<CustomHistory> list = customHistoryService.list(queryWrapper);
-
-        List<Integer> ids = list.stream().map(e -> e.getRid()).collect(Collectors.toList());
-
-        QueryWrapper queryWrapper2 = new QueryWrapper();
-        queryWrapper2.in("id", ids);
-        queryWrapper2.orderByDesc("id");
-        List<Rentinfo> rentinfoList = rentinfoService.list(queryWrapper2);
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
-        rentinfoList.forEach(e -> {
-            e.setShowDate(simpleDateFormat.format(e.getCreateDate()));
-        });
+        List<Rentinfo> rentinfoList=new ArrayList<>();
+        if(list.size()>0){
+            List<Integer> ids = list.stream().map(e -> e.getRid()).collect(Collectors.toList());
+            QueryWrapper queryWrapper2 = new QueryWrapper();
+            queryWrapper2.in("id", ids);
+            queryWrapper2.orderByDesc("id");
+            rentinfoList = rentinfoService.list(queryWrapper2);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+            rentinfoList.forEach(e -> {
+                e.setShowDate(simpleDateFormat.format(e.getCreateDate()));
+            });
+        }
         map.put("customhistory", rentinfoList);
         return map;
     }
@@ -316,13 +309,6 @@ public class WeixinController {
      *
      * @return
      */
-    @RequestMapping("/getnotice")
-    @ResponseBody
-    public Map getnotice() {
-        Map map = new HashMap();
-        map.put("notice", notice);
-        return map;
-    }
 
 
     /**

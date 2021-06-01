@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Date;
  */
 
 @TableName("Custom")
+@Data
 public class Custom implements Serializable {
     /**
      * 串行版本ID
@@ -80,112 +82,4 @@ public class Custom implements Serializable {
     @TableField(value = "updateDate")
     private Date updateDate;
 
-    /*状态，默认为1，0位取消定制*/
-    private Integer status = 1;
-
-
-    public Integer getCustomId() {
-        return customId;
-    }
-
-    public void setCustomId(Integer customId) {
-        this.customId = customId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Integer getLine() {
-        return line;
-    }
-
-    public void setLine(Integer line) {
-        this.line = line;
-    }
-
-    public String getStation() {
-        return station;
-    }
-
-    public void setStation(String station) {
-        this.station = station;
-    }
-
-    public Integer getRenttype() {
-        return renttype;
-    }
-
-    public void setRenttype(Integer renttype) {
-        this.renttype = renttype;
-    }
-
-    public Integer getPay() {
-        return pay;
-    }
-
-    public void setPay(Integer pay) {
-        this.pay = pay;
-    }
-
-    public Integer getOnlygril() {
-        return onlygril;
-    }
-
-    public void setOnlygril(Integer onlygril) {
-        this.onlygril = onlygril;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
 }

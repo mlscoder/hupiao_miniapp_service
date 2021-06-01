@@ -1,5 +1,6 @@
 package com.adong.start.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -12,5 +13,6 @@ public class Houseinfo {
     private String title;
 
     private String text;
-
+    @TableField(value = "createDate")
+    private String createDate;
 }

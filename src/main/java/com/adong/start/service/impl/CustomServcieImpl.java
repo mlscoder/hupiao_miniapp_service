@@ -20,8 +20,8 @@ public class CustomServcieImpl extends ServiceImpl<CustomDao, Custom>
         if (null == custom1) {
             return save(custom);
         } else {
-            custom.setCustomId(custom1.getCustomId());
-            return updateById(custom);
+            removeById(custom1.getCustomId());
+            return save(custom);
         }
 
     }

@@ -1,15 +1,11 @@
 package com.adong.start.task;
 
 
-import com.adong.start.model.Custom;
-import com.adong.start.model.CustomHistory;
-import com.adong.start.model.Rentinfo;
-import com.adong.start.model.WeixinUserInfo;
+import com.adong.start.model.*;
 import com.adong.start.service.*;
 import com.adong.start.util.SendUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -19,7 +15,7 @@ import java.util.*;
 /**
  * 定时推送服务
  * 早10点到晚上10点
- * 每30分钟运行一次
+ * 每15分钟运行一次
  */
 @Component
 public class PushTask {
@@ -42,8 +38,8 @@ public class PushTask {
     ImageService imageService;
 
 
-    // 定时器逻辑。早上9点-晚上22点，每半小时推送一次
-    @Scheduled(cron = "${pushcorn}")
+    // 定时器逻辑。早上9点-晚上22点，每15分钟推送一次
+    // @Scheduled(cron = "0 22 14 * * ?")
     public void push() {
         QueryWrapper custom = new QueryWrapper();
         custom.eq("status", 1);
@@ -63,19 +59,20 @@ public class PushTask {
                 q1.le("price", c.getPrice());
             }
             if (c.getOnlygril() == 1) {
-                q1.eq("onlygril", c.getOnlygril());
+                q1.eq("only_girl", c.getOnlygril());
             }
             if (c.getOnlygril() == 2) {
-                q1.eq("onlygril", "null");
+                q1.eq("only_girl", "null");
             }
             if (c.getCount() != null) {
                 q1.le("count", c.getCount());
             }
             if (c.getRenttype() != 0) {
-                q1.eq("renttype", c.getRenttype());
+                String type = c.getRenttype() == 1 ? "hz" : "zz";
+                q1.eq("rent_type", type);
             }
             //仅仅查询最近一天的内的数据，做到实时推送
-            q1.ge("createDate", calendar.getTime());
+            q1.ge("create_date", calendar.getTime());
             List<Rentinfo> rentinfos = rentinfoService.list(q1);
 
 
@@ -112,10 +109,11 @@ public class PushTask {
                 List<CustomHistory> histories = new ArrayList<>();
                 for (Rentinfo r : rentinfos) {
                     if (!set.contains(r.getId())) {
+                        Houseinfo houseinfo = houseinfoService.getById(r.getId());
                         CustomHistory customHistory = new CustomHistory();
                         customHistory.setRid(r.getId());
                         customHistory.setUserId(c.getUserId());
-                        customHistory.setTitle(r.getHouseinfo().getTitle());
+                        customHistory.setTitle(houseinfo.getTitle());
                         customHistory.setUrl(r.getUrl());
                         customHistory.setCreateDate(new Date());
                         customHistory.setIspush(0);

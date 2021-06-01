@@ -1,6 +1,6 @@
 package com.adong.start.util;
 
-import com.adong.start.SubwaySation.WxConfig;
+import com.adong.start.config.WxConfig;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 

@@ -1,7 +1,7 @@
 package com.adong.start.controller;
 
-import com.adong.start.model.UserDO;
-import com.alibaba.fastjson.JSON;
+import com.adong.start.service.AgentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +15,13 @@ import java.io.IOException;
 @RequestMapping("/hello")
 public class HelloController {
 
+    @Autowired
+    AgentService agentService;
+
     @PostMapping("/test")
     @ResponseBody
-    public UserDO getUser(HttpServletRequest request) throws IOException {
-        
-        //读取字节流转成字符串
-        String content = charReader(request);
-        //json字符串转成java对象
-        UserDO user = JSON.parseObject(content, UserDO.class);
-        return user;
+    public void getUser(HttpServletRequest request) throws IOException {
+        agentService.updateAgent();
     }
 
     //字符串读取
