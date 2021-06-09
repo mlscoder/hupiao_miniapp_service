@@ -1,6 +1,7 @@
 package com.adong.start.controller;
 
 import com.adong.start.service.AgentService;
+import com.adong.start.task.PushTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,10 +19,13 @@ public class HelloController {
     @Autowired
     AgentService agentService;
 
+    @Autowired
+    PushTask pushTask;
+
     @PostMapping("/test")
     @ResponseBody
     public void getUser(HttpServletRequest request) throws IOException {
-        agentService.updateAgent();
+        pushTask.push();
     }
 
     //字符串读取

@@ -38,15 +38,11 @@ public class Custom implements Serializable {
      */
     private Integer price;
 
-    /**
-     * 地址
-     */
-    private String address;
 
     /**
-     * 地铁线路
+     * 城市
      */
-    private Integer line;
+    private String city;
 
     /**
      * 地铁站名称
@@ -56,7 +52,7 @@ public class Custom implements Serializable {
     /**
      * 合/整租标记、1合2整租
      */
-    private Integer renttype;
+    private Integer rentType;
 
     /**
      * 付款类型
@@ -66,7 +62,7 @@ public class Custom implements Serializable {
     /**
      * 是否仅限女生标注
      */
-    private Integer onlygril;
+    private Integer onlyGirl;
 
     /**
      * 创建者发布的次数

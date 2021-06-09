@@ -14,7 +14,7 @@ import java.util.Date;
 public class SendUtil {
 
 
-    public static boolean sendmessage(String openId, String title, Integer rid,Integer count) {
+    public static boolean sendmessage(String openId, String title, Integer rid, Integer count) {
         String response = HttpsUtil.httpsRequestToString(UserInfoUtil.getAccessToken(), "GET", null);
         String access_token = (String) JSON.parseObject(response).get("access_token");
         //请求订阅消息的url
@@ -23,21 +23,18 @@ public class SendUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("touser", openId);
         jsonObject.put("template_id", WxConfig.mubanid);
-        jsonObject.put("page", "pages/confirm/confirm?rid=" + rid+"&count="+count);
+        jsonObject.put("page", "pages/confirm/confirm?rid=" + rid + "&count=" + count);
 
         JSONObject data = new JSONObject();
         JSONObject thing1 = new JSONObject();
-        thing1.put("value", "沪漂小窝有新消息,请及时查看！");
-        JSONObject thing2 = new JSONObject();
         if (title.length() > 20) {
             title = title.substring(0, 18) + "..";
         }
-        thing2.put("value", title);
+        thing1.put("value", title);
         JSONObject date3 = new JSONObject();
         date3.put("value", simpleDateFormat.format(new Date()));
         data.put("thing1", thing1);
-        data.put("thing2", thing2);
-        data.put("date3", date3);
+        data.put("time8", date3);
         jsonObject.put("data", data);
 
         System.out.println(jsonObject.toJSONString());

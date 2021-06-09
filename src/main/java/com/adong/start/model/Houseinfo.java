@@ -9,10 +9,13 @@ import lombok.Data;
 public class Houseinfo {
 
     private Integer id;
-
     private String title;
-
+    private String url;
     private String text;
     @TableField(value = "createDate")
     private String createDate;
+    @TableField(value = "crawDate")
+    private String crawDate;
+
+    private String creator;
 }

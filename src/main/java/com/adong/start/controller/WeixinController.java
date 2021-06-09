@@ -17,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,7 +61,6 @@ public class WeixinController {
             String WebAccessToken = "";
             String openId = "";
             String userId = null;
-            String sessionkey = "";
             // 替换字符串，获得请求URL
             String token = UserInfoUtil.getWebAccess(CODE);// 通过自定义工具类组合出小程序需要的登录凭证
 
@@ -132,58 +129,6 @@ public class WeixinController {
         userInfo.setUserId(userId);
         userInfo.setUpdateDate(new Date());
         userInfoService.updateUser(userInfo);
-    }
-
-
-    @RequestMapping("/sendsms")
-    @ResponseBody
-    public Map sendsms(String phone, String userId, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Map map = new HashMap();
-        int number = new Random().nextInt(999999);
-        if (number < 100000) {
-            number += 100000;
-        }
-        // 替换字符串，获得请求URL
-        String token = UserInfoUtil.sendsms(phone, number);
-        // 通过https方式请求获得
-        String response = HttpsUtil.httpsRequestToString(token, "GET", null);
-        JSONObject jsonObject = JSON.parseObject(response);
-        if (((Integer) jsonObject.get("status")) == 0) {
-
-            map.put("status", 0);
-            map.put("msg", "success");
-            map.put("number", number);
-        } else {
-            map.put("status", 1);
-            map.put("msg", "fail");
-        }
-        return map;
-    }
-
-    /**
-     * 更新手机号码
-     *
-     * @param userId 用户id
-     * @param phone  手机号码
-     */
-    @RequestMapping("/verify")
-    @ResponseBody
-    public Map verify(String userId, String phone) {
-
-        Map map = new HashMap();
-        try {
-            WeixinUserInfo userInfo = new WeixinUserInfo();
-            userInfo.setUserId(userId);
-            userInfo.setPhone(phone);
-            userInfoService.updateUser(userInfo);
-            map.put("status", 0);
-            map.put("msg", "success");
-        } catch (Exception e) {
-            map.put("status", 1);
-            map.put("msg", "fail");
-        }
-        return map;
     }
 
 
@@ -287,8 +232,8 @@ public class WeixinController {
         queryWrapper.orderByDesc("createDate");
         queryWrapper.last("limit 10");
         List<CustomHistory> list = customHistoryService.list(queryWrapper);
-        List<Rentinfo> rentinfoList=new ArrayList<>();
-        if(list.size()>0){
+        List<Rentinfo> rentinfoList = new ArrayList<>();
+        if (list.size() > 0) {
             List<Integer> ids = list.stream().map(e -> e.getRid()).collect(Collectors.toList());
             QueryWrapper queryWrapper2 = new QueryWrapper();
             queryWrapper2.in("id", ids);
@@ -296,6 +241,9 @@ public class WeixinController {
             rentinfoList = rentinfoService.list(queryWrapper2);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
             rentinfoList.forEach(e -> {
+                QueryWrapper<Image> q = new QueryWrapper<>();
+                q.eq("r_id", e.getId());
+                e.setMainImgUrl(imageService.list(q).get(0).getUrl());
                 e.setShowDate(simpleDateFormat.format(e.getCreateDate()));
             });
         }
@@ -369,8 +317,32 @@ public class WeixinController {
     @ResponseBody
     public Map queryMessage() {
         Map map = new HashMap();
-        Message message = messageService.list().get(0);
+        Message message = messageService.getById(1);
         map.put("data", message);
+        return map;
+    }
+
+    /*获取最新的公告栏信息*/
+    @RequestMapping("/message2")
+    @ResponseBody
+    public Map<String, Object> queryMessageForHupiao() {
+        Map<String, Object> map = new HashMap<>();
+        QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type", "2");
+        List<Message> messages = messageService.list(queryWrapper);
+        map.put("data", messages.get(0));
+        return map;
+    }
+
+    /*获取最新的公告栏信息*/
+    @RequestMapping("/message3")
+    @ResponseBody
+    public Map<String, Object> queryMessageForzfss() {
+        Map<String, Object> map = new HashMap<>();
+        QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type", "3");
+        List<Message> messages = messageService.list(queryWrapper);
+        map.put("data", messages.get(0));
         return map;
     }
 
@@ -395,7 +367,7 @@ public class WeixinController {
 
         QueryWrapper<Subway> q2 = new QueryWrapper<>();
         q2.eq("city_code", cityCode);
-        q2.eq("sort_index","1");
+        q2.eq("sort_index", "1");
         List<Subway> subways2 = subwayService.list(q2);
 
         Map<String, Object> result = new HashMap<>();
